@@ -17,6 +17,7 @@ public class DreamActivity extends DreamService {
 	//private Timer displayQuotes = new Timer();
 	private boolean contToDream = true;
 	//private Looper loopy = new Looper ();
+	private Animation alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
 	@Override
 	
 	public void onAttachedToWindow  () {
@@ -34,90 +35,12 @@ public class DreamActivity extends DreamService {
 	
 	public void onDreamingStarted () {
 		super.onDreamingStarted();
-		final Animation alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
+		
 		
 		while (contToDream){
 			displayQuotes();
 		}
-		/*try {
-			displayQuotes.scheduleAtFixedRate(new TimerTask (){
-				int iter = 0;
-				
-				public void run () {
-					runOnUiThread(new Runnable() {
-						public void run () {
-							++iter;
-							switch (iter)
-							{
-							case 1:
-								dreamQuote.setText(R.string.first);
-								dreamQuote.clearAnimation();
-								dreamQuote.startAnimation(alphaAnimation);
-								break;
-							case 2:
-								dreamQuote.setText(R.string.second);
-								dreamQuote.clearAnimation();
-								dreamQuote.startAnimation(alphaAnimation);
-								break;
-							case 3:
-								dreamQuote.setText(R.string.third);
-								dreamQuote.clearAnimation();
-								dreamQuote.startAnimation(alphaAnimation);
-								break;
-							case 4:
-								dreamQuote.setText(R.string.fourth);
-								dreamQuote.clearAnimation();
-								dreamQuote.startAnimation(alphaAnimation);
-								break;
-							default:
-								iter = 0;	
-							}
-						}
-					});
-				}
-				
-				
-			}, 0, 7000);
-		}
-		catch (Exception e) {
-			Log.e("Dream",e.toString());
-		}*/
-				
-		/*Looper.prepare();
-		Handler handler = new Handler (); 
-		handler.postDelayed(new Runnable() {
-			int iter = 0;
-			public void run () {
-				++iter;
-				switch (iter)
-				{
-				case 1:
-					dreamQuote.setText(R.string.first);
-					dreamQuote.clearAnimation();
-					dreamQuote.startAnimation(alphaAnimation);
-					break;
-				case 2:
-					dreamQuote.setText(R.string.second);
-					dreamQuote.clearAnimation();
-					dreamQuote.startAnimation(alphaAnimation);
-					break;
-				case 3:
-					dreamQuote.setText(R.string.third);
-					dreamQuote.clearAnimation();
-					dreamQuote.startAnimation(alphaAnimation);
-					break;
-				case 4:
-					dreamQuote.setText(R.string.fourth);
-					dreamQuote.clearAnimation();
-					dreamQuote.startAnimation(alphaAnimation);
-					break;
-				default:
-					iter = 0;	
-				}
-			}			
-		}, 7000);
 		
-		Looper.loop();*/
 	}
 	
 	private void displayQuotes() {
