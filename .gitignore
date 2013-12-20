@@ -7,3 +7,5 @@
 libs/
 proguard-project.txt
 project.properties
+bin/classes.dex
+bin/resources.ap_
