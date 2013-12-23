@@ -70,5 +70,6 @@ public class DreamActivity extends DreamService {
 	
 	public void onDreamingStopped () {
 		super.onDreamingStopped();
+		Log.d("QuotationsDaydream", "Daydream ended not with a bang but with an encore...");
 	}
 }
