@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 public class DreamActivity extends DreamService {
 	private TextView dreamQuote;
-	private Animation alphaAnimation;
-	private static Looper loopie;
+	//private Animation alphaAnimation;
 	private boolean runDream;
+	private Thread myThread;
 	@Override
 	
 	public void onAttachedToWindow  () {
@@ -25,7 +25,7 @@ public class DreamActivity extends DreamService {
 			
 			setContentView(R.layout.activity_dream);
 			dreamQuote = (TextView)findViewById(R.id.dream_quotes);
-			alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
+			//alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
 			runDream = true;
 		}catch (Exception e) {
 			Log.e("QuotationsDaydream", e.toString());
@@ -35,53 +35,53 @@ public class DreamActivity extends DreamService {
 	public void onDreamingStarted () {
 		super.onDreamingStarted();
 		try{
-			loopie = Looper.myLooper();
-			Handler myHandler = new Handler();
-			displayQuotes();
-			myHandler.postDelayed(new Runnable () {
-				public void run () {
-					displayQuotes();
+			Runnable myRun = new Runnable() {
+
+				@Override
+				public void run()
+				{
+					while(runDream)
+					{
+						try{
+							Thread.sleep();
+							
+							final String quote = displayQuotes();
+							dreamQuote.post(new Runnable() {
+								
+								@Override
+								public void run(){
+									dreamQuote.setText(quote);
+								}
+							});
+							
+						}catch(InterruptedException ie){
+							Log.e("Quoatations",ie.toString());
+						}
+					}
 				}
-			}, 7000);
-			
-			//displayQuotes();
-			Looper.loop();
-			
+			};
+			myThread = new Thread(myRun);
+			myThread.start();
 		}catch (Exception e) {
 			Log.e("QuotationsDaydream", e.toString());
 		}
 		
 	}
 	
-	private void displayQuotes() {
+	private String displayQuotes() {
 		Random rn = new Random();
 		int nextQuote = rn.nextInt(4);
 		switch (nextQuote){
 		case 0:
-			dreamQuote.setText(R.string.first);
-			dreamQuote.clearAnimation();
-			dreamQuote.startAnimation(alphaAnimation);
-			break;
+			return("The first quote");
 		case 1:
-			dreamQuote.setText(R.string.second);
-			dreamQuote.clearAnimation();
-			dreamQuote.startAnimation(alphaAnimation);
-			break;
+			return("The second quote");
 		case 2:
-			dreamQuote.setText(R.string.third);
-			dreamQuote.clearAnimation();
-			dreamQuote.startAnimation(alphaAnimation);
-			break;
+			return("The third quote");
 		case 3:
-			dreamQuote.setText(R.string.fourth);
-			dreamQuote.clearAnimation();
-			dreamQuote.startAnimation(alphaAnimation);
-			break;
+			return("The fourth quote");
 		default:
-			dreamQuote.setText(R.string.first);
-			dreamQuote.clearAnimation();
-			dreamQuote.startAnimation(alphaAnimation);
-				
+			return("The defaulte quote");
 		}
 	}
 	
@@ -89,6 +89,7 @@ public class DreamActivity extends DreamService {
 		super.onDreamingStopped();
 		//loopie.quitSafely();
 		runDream = false;
+		myThread.stop();
 		Log.d("QuotationsDaydream", "Daydream ended not with a bang but with an encore...");
 	}
 }
