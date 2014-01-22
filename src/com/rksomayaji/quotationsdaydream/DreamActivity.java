@@ -2,8 +2,6 @@ package com.rksomayaji.quotationsdaydream;
 
 import java.util.Random;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.service.dreams.DreamService;
 import android.util.Log;
 import android.view.animation.Animation;
