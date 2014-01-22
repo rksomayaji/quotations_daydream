@@ -2,8 +2,9 @@ package com.rksomayaji.quotationsdaydream;
 
 import java.util.Random;
 
-import android.os.Handler;
-import android.os.Looper;
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorSet;
 import android.service.dreams.DreamService;
 import android.util.Log;
 import android.view.animation.Animation;
@@ -13,8 +14,6 @@ import android.widget.TextView;
 public class DreamActivity extends DreamService {
 	private TextView dreamQuote;
 	private Animation alphaAnimation;
-	private static Looper loopie;
-	private boolean runDream;
 	@Override
 	
 	public void onAttachedToWindow  () {
@@ -26,7 +25,6 @@ public class DreamActivity extends DreamService {
 			setContentView(R.layout.activity_dream);
 			dreamQuote = (TextView)findViewById(R.id.dream_quotes);
 			alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
-			runDream = true;
 		}catch (Exception e) {
 			Log.e("QuotationsDaydream", e.toString());
 		}
@@ -35,18 +33,36 @@ public class DreamActivity extends DreamService {
 	public void onDreamingStarted () {
 		super.onDreamingStarted();
 		try{
-			loopie = Looper.myLooper();
-			Handler myHandler = new Handler();
-			displayQuotes();
-			myHandler.postDelayed(new Runnable () {
-				public void run () {
-					displayQuotes();
+			final AnimatorSet quotes = new AnimatorSet();
+			Animator anim = null;
+			quotes.play(anim);
+			quotes.addListener(new AnimatorListener () {
+				@Override
+				public void onAnimationEnd(Animator animation)
+				{
+					quotes.start();
 				}
-			}, 7000);
-			
-			//displayQuotes();
-			Looper.loop();
-			
+				
+				@Override
+				public void onAnimationCancel(Animator arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void onAnimationRepeat(Animator arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void onAnimationStart(Animator arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			quotes.start();
+
 		}catch (Exception e) {
 			Log.e("QuotationsDaydream", e.toString());
 		}
@@ -87,8 +103,6 @@ public class DreamActivity extends DreamService {
 	
 	public void onDreamingStopped () {
 		super.onDreamingStopped();
-		//loopie.quitSafely();
-		runDream = false;
 		Log.d("QuotationsDaydream", "Daydream ended not with a bang but with an encore...");
 	}
 }
