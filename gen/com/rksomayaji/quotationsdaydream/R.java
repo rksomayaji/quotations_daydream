@@ -9,7 +9,8 @@ package com.rksomayaji.quotationsdaydream;
 
 public final class R {
     public static final class anim {
-        public static final int anim_alpha=0x7f040000;
+        public static final int anim_alpha_in=0x7f040000;
+        public static final int anim_alpha_out=0x7f040001;
     }
     public static final class attr {
     }

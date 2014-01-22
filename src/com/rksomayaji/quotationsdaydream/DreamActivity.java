@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 public class DreamActivity extends DreamService {
 	private TextView dreamQuote;
-	//private Animation alphaAnimation;
+	private Animation alphaAnimIn, alphaAnimOut;
 	private boolean runDream;
 	private Thread myThread;
 	@Override
@@ -23,7 +23,8 @@ public class DreamActivity extends DreamService {
 			
 			setContentView(R.layout.activity_dream);
 			dreamQuote = (TextView)findViewById(R.id.dream_quotes);
-			//alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
+			alphaAnimIn = AnimationUtils.loadAnimation(this, R.anim.anim_alpha_in);
+			alphaAnimOut = AnimationUtils.loadAnimation(this, R.anim.anim_alpha_out);
 			runDream = true;
 		}catch (Exception e) {
 			Log.e("QuotationsDaydream", e.toString());
@@ -62,7 +63,6 @@ public class DreamActivity extends DreamService {
 			myThread.start();
 		}catch (Exception e) {
 			Log.e("QuotationsDaydream", e.toString());
-
 		}
 		
 	}
