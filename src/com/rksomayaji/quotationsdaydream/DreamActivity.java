@@ -1,6 +1,9 @@
 package com.rksomayaji.quotationsdaydream;
 
 import java.util.Random;
+
+import android.os.Handler;
+import android.os.Looper;
 import android.service.dreams.DreamService;
 import android.util.Log;
 import android.view.animation.Animation;
@@ -9,8 +12,8 @@ import android.widget.TextView;
 
 public class DreamActivity extends DreamService {
 	private TextView dreamQuote;
-	private Animation alphaAnimation;
-	private boolean displayQ = true;
+	//private Animation alphaAnimation;
+	private boolean runDream;
 	private Thread myThread;
 	@Override
 	
@@ -22,7 +25,8 @@ public class DreamActivity extends DreamService {
 			
 			setContentView(R.layout.activity_dream);
 			dreamQuote = (TextView)findViewById(R.id.dream_quotes);
-			alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
+			//alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
+			runDream = true;
 		}catch (Exception e) {
 			Log.e("QuotationsDaydream", e.toString());
 		}
@@ -32,61 +36,59 @@ public class DreamActivity extends DreamService {
 		super.onDreamingStarted();
 		try{
 			Runnable myRun = new Runnable() {
-				
+
 				@Override
-				public void run() {
-					while (displayQ) {
-						try {
+				public void run()
+				{
+					while(runDream)
+					{
+						try{
 							Thread.sleep(1000);
-							final String quotes = displayQuotes();
-							dreamQuote.post(new Runnable(){
-									@Override
-									public void run() {
-										dreamQuote.setText(quotes);
-									}
-								});
-						}catch (InterruptedException ie){
-							Log.e("Quotations", ie.toString());
+							
+							final String quote = displayQuotes();
+							dreamQuote.post(new Runnable() {
+								
+								@Override
+								public void run(){
+									dreamQuote.setText(quote);
+								}
+							});
+							
+						}catch(InterruptedException ie){
+							Log.e("Quoatations",ie.toString());
 						}
 					}
 				}
 			};
-			//displayQuotes();
 			myThread = new Thread(myRun);
 			myThread.start();
-		}catch (Exception ie) {
-			Log.e("QuotationsDaydream", ie.toString());
-			
+		}catch (Exception e) {
+			Log.e("QuotationsDaydream", e.toString());
+
 		}
 		
 	}
 	
 	private String displayQuotes() {
 		Random rn = new Random();
-		//String text;
 		int nextQuote = rn.nextInt(4);
 		switch (nextQuote){
 		case 0:
 			return("The first quote");
-			//break;
 		case 1:
 			return("the second quote");
-			//break;
 		case 2:
-			return("the third quote");
-			//break;
+			return("The third quote");
 		case 3:
-			return("the fourth quote");
-			//break;
+			return("The fourth quote");
 		default:
-			return("the default quote");
-				
+			return("The defaulte quote");
 		}
 	}
 	
 	public void onDreamingStopped () {
 		super.onDreamingStopped();
-		displayQ = false;
+		runDream = false;
 		myThread.stop();
 		Log.d("QuotationsDaydream", "Daydream ended not with a bang but with an encore...");
 	}
